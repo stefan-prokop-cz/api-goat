@@ -1,6 +1,8 @@
 mod app;
 
+use app::server;
+
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
-    app::start().await
+    server::start().await
 }
