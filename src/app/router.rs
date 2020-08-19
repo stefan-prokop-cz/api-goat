@@ -1,5 +1,5 @@
 use super::users;
-use actix_web::{web};
+use actix_web::web;
 
 pub fn new(app: &mut web::ServiceConfig) {
     app.service(web::resource("/").route(web::get().to(index)))

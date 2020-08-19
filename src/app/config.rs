@@ -14,8 +14,7 @@ impl Config {
                 .unwrap_or(String::from("3000"))
                 .parse::<u16>()
                 .unwrap(),
-            database_url: env::var("DATABASE_URL")
-                .unwrap_or(String::from(""))
+            database_url: env::var("DATABASE_URL").unwrap_or(String::from("")),
         }
     }
     pub fn load() {
