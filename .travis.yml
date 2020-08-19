@@ -3,4 +3,4 @@ rust:
   - stable
 
 script:
-  - cargo build --verbose --all
+  - cargo build --verbose
