@@ -1,0 +1,12 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:5.7
+    environment:
+      - MYSQL_USER=root
+      - MYSQL_ROOT_PASSWORD=strongPassword123
+      - MYSQL_DATABASE=api_goat
+    ports:
+      - '3306:3306'
+    expose:
+      - '3306'
