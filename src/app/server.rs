@@ -1,4 +1,5 @@
 use super::config::Config;
+use super::database;
 use super::router;
 use actix_web::middleware::Logger;
 use actix_web::{dev, App, HttpServer};
@@ -9,6 +10,7 @@ pub fn start() -> dev::Server {
     let config = Config::get();
     env_logger::init();
     info!("Running with {:?}", config);
+    database::connect();
     HttpServer::new(|| App::new().configure(router::new).wrap(Logger::default()))
         .bind(format!("127.0.0.1:{}", config.server_port))
         .unwrap_or_else(|error| {
