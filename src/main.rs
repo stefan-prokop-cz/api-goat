@@ -1,3 +1,6 @@
+#[macro_use]
+extern crate log;
+
 mod app;
 
 use app::server;
