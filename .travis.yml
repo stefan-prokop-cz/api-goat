@@ -1,16 +1,23 @@
 language: rust
 
+services:
+  - docker
+
 rust:
   - stable
 
-addons:
-  apt:
-    packages:
-      - docker-ce
+install:
+  - docker-compose build
+  - docker-compose up -d
+  - cargo install diesel_cli --no-default-features --features mysql
+
+before_script:
+  - diesel migration run
 
 script:
   - cargo build
-  - cargo install diesel_cli --no-default-features --features mysql
-  - docker-compose up
-  - diesel migration run
   - cargo test
+
+after_script:
+  - docker-compose stop
+  - docker-compose rm -f
