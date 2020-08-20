@@ -3,6 +3,9 @@ use diesel::MysqlConnection;
 use r2d2;
 use r2d2_diesel::ConnectionManager;
 
+pub mod models;
+pub mod schema;
+
 pub fn connect() -> r2d2::Pool<ConnectionManager<MysqlConnection>> {
     let config = config::Config::get();
     let manager = ConnectionManager::<MysqlConnection>::new(config.database_url);
