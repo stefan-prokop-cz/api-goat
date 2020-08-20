@@ -4,5 +4,5 @@ create table if not exists users (
     password varchar(255) not null,
     name varchar(255),
     surname varchar(255),
-    primary key (id),
+    primary key (id)
 )
