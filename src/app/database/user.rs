@@ -9,8 +9,7 @@ pub struct User {
     pub surname: String,
 }
 
-#[derive(Debug)]
-#[derive(Insertable)]
+#[derive(Debug, Insertable)]
 #[table_name = "users"]
 pub struct NewUser<'a> {
     pub username: &'a str,
@@ -21,8 +20,8 @@ pub struct NewUser<'a> {
 
 #[cfg(test)]
 mod tests {
+    use super::super::super::config;
     use super::super::*;
-    use super::super::super::{config};
     use crate::app::database::user::NewUser;
     use diesel::RunQueryDsl;
 
