@@ -1,16 +1,14 @@
 use crate::app::config;
-use diesel::MysqlConnection;
-use r2d2;
-use r2d2_diesel::ConnectionManager;
+use diesel::mysql::MysqlConnection;
+use diesel::Connection;
 
-pub mod models;
 pub mod schema;
+pub mod user;
 
-pub fn connect() -> r2d2::Pool<ConnectionManager<MysqlConnection>> {
+pub fn connect() -> MysqlConnection {
     let config = config::Config::get();
-    let manager = ConnectionManager::<MysqlConnection>::new(config.database_url);
-    let pool = r2d2::Pool::new(manager)
+    let connection = MysqlConnection::establish(&config.database_url)
         .unwrap_or_else(|error| panic!("Cannot connect to MySQL: {}", error));
     info!("Successfully connected to MySQL");
-    pool
+    connection
 }
