@@ -5,3 +5,5 @@
 - Simple REST API with vulnerabilities written in Rust
 
 :construction: Under development :construction:
+
+## How to run
