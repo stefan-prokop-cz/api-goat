@@ -12,7 +12,7 @@ pub fn start() -> dev::Server {
     info!("Running with {:?}", config);
     database::connect();
     HttpServer::new(|| App::new().configure(router::new).wrap(Logger::default()))
-        .bind(format!("127.0.0.1:{}", config.server_port))
+        .bind(format!("0.0.0.0:{}", config.server_port))
         .unwrap_or_else(|error| {
             panic!(
                 "Could not bind server to address 127.0.0.1:{}: {}",
