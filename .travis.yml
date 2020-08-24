@@ -7,8 +7,8 @@ rust:
   - stable
 
 install:
-  - docker-compose up -d mysql
-  - cargo install diesel_cli --no-default-features --features mysql
+  - docker-compose up -d postgres
+  - cargo install diesel_cli --no-default-features --features postgres
 
 before_script:
   - diesel migration run
