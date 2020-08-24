@@ -3,7 +3,7 @@ WORKDIR /usr/src
 
 RUN USER=root cargo new api
 WORKDIR /usr/src/api
-RUN CARGO_INSTALL_ROOT=. cargo install diesel_cli --no-default-features --features mysql
+RUN CARGO_INSTALL_ROOT=. cargo install diesel_cli --no-default-features --features postgres
 
 COPY ./Cargo.lock ./Cargo.lock
 COPY ./Cargo.toml ./Cargo.toml
@@ -19,7 +19,7 @@ RUN cargo build --release
 FROM ubuntu
 
 RUN apt-get update
-RUN apt-get install -y libmariadbclient-dev
+RUN apt-get install -y libpq-dev
 
 COPY --from=build /usr/src/api/target/release/api-goat .
 COPY --from=build /usr/src/api/.env .
