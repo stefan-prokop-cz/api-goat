@@ -2,23 +2,23 @@ version: "3.7"
 services:
   api:
     environment:
-      - DATABASE_URL=mysql://root:strongPassword123@mysql:3306/api_goat
+      - DATABASE_URL=postgres://root:strongPassword123@postgres:5432/api_goat
       - RUST_BACKTRACE=full
     build: .
     ports:
     - "3000:3000"
     depends_on:
-      - mysql
+      - postgres
     expose:
       - "3000"
     entrypoint: ./docker-compose-entrypoint.sh
-  mysql:
-    image: mysql:5.7
+  postgres:
+    image: library/postgres:12.4
     environment:
-      - MYSQL_USER=root
-      - MYSQL_ROOT_PASSWORD=strongPassword123
-      - MYSQL_DATABASE=api_goat
+      - POSTGRES_USER=root
+      - POSTGRES_PASSWORD=strongPassword123
+      - POSTGRES_DB=api_goat
     ports:
-      - "3306:3306"
+      - "5432:5432"
     expose:
-      - "3306"
+      - "5432"
