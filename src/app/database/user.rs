@@ -1,15 +1,15 @@
 use super::schema::users;
 
-#[derive(Debug, Queryable)]
+#[derive(Queryable)]
 pub struct User {
     pub id: i32,
     pub username: String,
     pub password: String,
-    pub name: String,
-    pub surname: String,
+    pub name: Option<String>,
+    pub surname: Option<String>,
 }
 
-#[derive(Debug, Insertable)]
+#[derive(Insertable)]
 #[table_name = "users"]
 pub struct NewUser<'a> {
     pub username: &'a str,
@@ -22,22 +22,36 @@ pub struct NewUser<'a> {
 mod tests {
     use super::super::super::config;
     use super::super::*;
-    use crate::app::database::user::NewUser;
+    use crate::app::database::user::{NewUser, User};
     use diesel::RunQueryDsl;
 
-    #[test]
-    fn create_user() {
-        let user = NewUser {
+    fn init() -> PgConnection {
+        config::Config::load();
+        connect()
+    }
+
+    fn get_seed() -> NewUser<'static> {
+        NewUser {
             password: "myStrongPassword",
             username: "test@example.com",
             name: None,
             surname: None,
-        };
-        config::Config::load();
-        let connection = connect();
-        let _create_user = diesel::insert_into(schema::users::table)
-            .values(user)
-            .execute(&connection)
-            .expect("Error");
+        }
+    }
+
+    #[test]
+    fn create_user() {
+        use schema::users;
+        let user = get_seed();
+        let connection = init();
+        let created_user: User = diesel::insert_into(users::table)
+            .values(&user)
+            .get_result(&connection)
+            .expect("Cannot create user!");
+        assert_eq!(created_user.name.is_none(), user.name.is_none());
+        assert_eq!(created_user.surname.is_none(), user.surname.is_none());
+        assert_eq!(created_user.username.as_str(), user.username);
+        assert_eq!(created_user.password.as_str(), user.password);
+        assert!(created_user.id > 0);
     }
 }
