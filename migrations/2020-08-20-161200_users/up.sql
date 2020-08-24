@@ -1,8 +1,7 @@
-create table if not exists users (
-    id int(11) not null auto_increment,
-    username varchar(255) not null unique,
-    password varchar(255) not null,
-    name varchar(255),
-    surname varchar(255),
-    primary key (id)
+CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  username VARCHAR NOT NULL UNIQUE,
+  password VARCHAR NOT NULL,
+  name VARCHAR,
+  surname VARCHAR
 )
