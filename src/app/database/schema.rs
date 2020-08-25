@@ -1,5 +1,5 @@
 table! {
-    users (id) {
+    users {
         id -> Int4,
         username -> Varchar,
         password -> Varchar,
