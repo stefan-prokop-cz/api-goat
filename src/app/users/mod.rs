@@ -13,3 +13,10 @@ pub async fn list() -> Json<Vec<User>> {
         password: String::from("myStrongPassword"),
     }])
 }
+
+// todo: this is for testing only, remove error
+pub async fn detail() -> HttpResponse<Body> {
+    HttpResponse::NotFound()
+        .content_type("application/json")
+        .body(format!(r#"{{ "error": "User not found" }}"#))
+}

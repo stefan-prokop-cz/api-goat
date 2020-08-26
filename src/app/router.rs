@@ -6,7 +6,8 @@ pub fn new(app: &mut web::ServiceConfig) {
     app.service(web::resource("/").route(web::get().to(index)))
         .service(
             web::scope("/api/v1")
-                .service(web::resource("/users").route(web::get().to(users::list))),
+                .service(web::resource("/users").route(web::get().to(users::list)))
+                .service(web::resource("/users/{id}").route(web::get().to(users::detail))),
         );
 }
 
