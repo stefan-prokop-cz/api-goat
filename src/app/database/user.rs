@@ -1,6 +1,7 @@
 use super::schema::users;
+use serde::Serialize;
 
-#[derive(Queryable, Identifiable)]
+#[derive(Queryable, Identifiable, Serialize)]
 pub struct User {
     pub id: i32,
     pub username: String,
@@ -23,7 +24,7 @@ mod tests {
     use super::super::super::config;
     use super::super::*;
     use crate::app::database::user::{NewUser, User};
-    use diesel::{RunQueryDsl, QueryDsl, prelude::*};
+    use diesel::{prelude::*, QueryDsl, RunQueryDsl};
     use schema::users::{dsl, table};
 
     fn init() -> PgConnection {
@@ -70,7 +71,8 @@ mod tests {
 
     fn get_users(id: i32) -> Vec<User> {
         let connection = init();
-        dsl::users.find(id)
+        dsl::users
+            .find(id)
             .load::<User>(&connection)
             .expect("Cannot get user")
     }
