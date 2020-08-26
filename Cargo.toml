@@ -12,3 +12,4 @@ dotenv = "0.15.0"
 diesel = { version = "1.4.5", features = ["postgres"] }
 env_logger = "0.7.1"
 log = "0.4.11"
+serde = "1.0.115"

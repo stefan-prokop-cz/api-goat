@@ -295,6 +295,7 @@ dependencies = [
  "dotenv",
  "env_logger",
  "log",
+ "serde",
 ]
 
 [[package]]
