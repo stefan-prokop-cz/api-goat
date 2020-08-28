@@ -2,10 +2,10 @@ use super::config;
 use super::database::user::User;
 use actix_web::web::Json;
 use hmac::{Hmac, NewMac};
-use jwt::{Claims, RegisteredClaims, Token, Header, AlgorithmType, SignWithKey};
+use jwt::{AlgorithmType, Claims, Header, RegisteredClaims, SignWithKey, Token};
+use serde::Serialize;
 use sha2::Sha384;
 use std::collections::BTreeMap;
-use serde::Serialize;
 
 #[derive(Serialize)]
 pub struct SignInResponse {
@@ -75,10 +75,9 @@ pub fn get_credentials(user: &User) -> CredentialsResponse {
         algorithm: AlgorithmType::Hs384,
         ..Default::default()
     };
-    let key: Hmac<Sha384> = Hmac::new_varkey(config::Config::get().token_secret.as_bytes()).unwrap();
-    let token = Token::new(header, claims)
-        .sign_with_key(&key)
-        .unwrap();
+    let key: Hmac<Sha384> =
+        Hmac::new_varkey(config::Config::get().token_secret.as_bytes()).unwrap();
+    let token = Token::new(header, claims).sign_with_key(&key).unwrap();
     CredentialsResponse {
         access_token: token.as_str().to_string(),
         refresh_token: token.as_str().to_string(),

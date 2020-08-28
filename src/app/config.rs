@@ -16,8 +16,7 @@ impl Config {
                 .parse::<u16>()
                 .unwrap(),
             database_url: env::var("DATABASE_URL").expect("DATABASE_URL must be set"),
-            token_secret: env::var("TOKEN_SECRET")
-                .expect("TOKEN_SECRET must be set"),
+            token_secret: env::var("TOKEN_SECRET").expect("TOKEN_SECRET must be set"),
         }
     }
     pub fn load() {
