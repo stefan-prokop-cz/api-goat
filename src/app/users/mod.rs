@@ -20,3 +20,23 @@ pub async fn detail() -> HttpResponse<Body> {
         .content_type("application/json")
         .body(format!(r#"{{ "error": "User not found" }}"#))
 }
+
+#[cfg(test)]
+mod tests {
+    use bcrypt::{hash, verify, DEFAULT_COST};
+
+    #[test]
+    fn hash_password() {
+        let password = "myPassword";
+        let hashed = hash(&password, DEFAULT_COST).expect("Cannot hash password");
+        assert_ne!(hashed, password);
+        assert_eq!(
+            verify(&password, &hashed).expect("Cannot verify password"),
+            true
+        );
+        assert_eq!(
+            verify("mypassword", &hashed).expect("Cannot verify password"),
+            false
+        );
+    }
+}
