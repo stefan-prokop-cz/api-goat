@@ -1,7 +1,9 @@
+use super::super::database::connect;
 use super::schema::users;
-use serde::Serialize;
+use diesel::prelude::*;
+use serde::{Deserialize, Serialize};
 
-#[derive(Queryable, Identifiable, Serialize)]
+#[derive(Queryable, Identifiable, Serialize, Deserialize)]
 pub struct User {
     pub id: i32,
     pub username: String,
@@ -10,19 +12,29 @@ pub struct User {
     pub surname: Option<String>,
 }
 
-#[derive(Insertable)]
+#[derive(Deserialize, Insertable)]
 #[table_name = "users"]
-pub struct NewUser<'a> {
-    pub username: &'a str,
-    pub password: &'a str,
-    pub name: Option<&'a str>,
-    pub surname: Option<&'a str>,
+pub struct NewUser {
+    pub username: String,
+    pub password: String,
+    pub name: Option<String>,
+    pub surname: Option<String>,
+}
+
+pub fn create_user(user: &NewUser) -> User {
+    let connection = connect();
+    let created_user: User = diesel::insert_into(users::table)
+        .values(user)
+        .get_result(&connection)
+        .expect("Cannot create user!");
+    created_user
 }
 
 #[cfg(test)]
 mod tests {
     use super::super::super::config;
     use super::super::*;
+    use super::create_user as create_user_fn;
     use crate::app::database::user::{NewUser, User};
     use diesel::{prelude::*, QueryDsl, RunQueryDsl};
     use schema::users::{dsl, table};
@@ -32,10 +44,10 @@ mod tests {
         connect()
     }
 
-    fn get_seed() -> NewUser<'static> {
+    fn get_seed() -> NewUser {
         NewUser {
-            password: "myStrongPassword",
-            username: "test@example21.com",
+            password: String::from("myStrongPassword"),
+            username: String::from("test@example21.com"),
             name: None,
             surname: None,
         }
@@ -44,10 +56,7 @@ mod tests {
     fn create_user() -> User {
         let user = get_seed();
         let connection = init();
-        let created_user: User = diesel::insert_into(table)
-            .values(&user)
-            .get_result(&connection)
-            .expect("Cannot create user!");
+        let created_user = create_user_fn(&user);
         assert_eq!(created_user.name.is_none(), user.name.is_none());
         assert_eq!(created_user.surname.is_none(), user.surname.is_none());
         assert_eq!(created_user.username.as_str(), user.username);

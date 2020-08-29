@@ -8,11 +8,13 @@ pub fn new(app: &mut web::ServiceConfig) {
         .service(
             web::scope("/api/v1")
                 .service(
-                    web::scope("/auth").service(
-                        web::resource("/sign-in")
-                            .route(web::post().to(auth::sign_in_post))
-                            .route(web::get().to(auth::sign_in_get)),
-                    ),
+                    web::scope("/auth")
+                        .service(
+                            web::resource("/sign-in")
+                                .route(web::post().to(auth::sign_in_post))
+                                .route(web::get().to(auth::sign_in_get)),
+                        )
+                        .service(web::resource("/sign-up").route(web::post().to(auth::sign_up))),
                 )
                 .service(web::resource("/users").route(web::get().to(users::list)))
                 .service(web::resource("/users/{id}").route(web::get().to(users::detail))),

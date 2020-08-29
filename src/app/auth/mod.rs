@@ -1,5 +1,6 @@
 use super::config;
-use super::database::user::User;
+use super::database::user::{NewUser, User};
+use super::users::{create};
 use actix_web::web::Json;
 use hmac::{Hmac, NewMac};
 use jwt::{AlgorithmType, Claims, Header, RegisteredClaims, SignWithKey, Token};
@@ -38,6 +39,17 @@ pub async fn sign_in_get() -> Json<SignInResponse> {
             username: "",
         })
         .unwrap(),
+    )
+}
+
+pub async fn sign_up(user: Json<NewUser>) -> Json<SignInResponse> {
+    create(&user);
+    Json(
+        sign_user_in(Credentials {
+            password: "password.as_str()",
+            username: "username.as_str()",
+        })
+        .expect("Cannot get user credentials"),
     )
 }
 
