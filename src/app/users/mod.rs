@@ -2,6 +2,8 @@ use super::database::user::User;
 use actix_web::body::Body;
 use actix_web::web::Json;
 use actix_web::HttpResponse;
+use crate::app::database::user::{NewUser, create_user};
+use bcrypt::{hash, DEFAULT_COST};
 
 pub async fn list() -> Json<Vec<User>> {
     // todo: this is for testing only
@@ -19,6 +21,16 @@ pub async fn detail() -> HttpResponse<Body> {
     HttpResponse::NotFound()
         .content_type("application/json")
         .body(format!(r#"{{ "error": "User not found" }}"#))
+}
+
+pub fn create(user: &NewUser) -> User {
+    let u = NewUser {
+        password: hash(user.password.as_str(), DEFAULT_COST).unwrap(),
+        username: user.username.clone(),
+        name: user.name.clone(),
+        surname: user.surname.clone(),
+    };
+    create_user(&u)
 }
 
 #[cfg(test)]
