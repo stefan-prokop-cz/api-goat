@@ -1,0 +1,11 @@
+### Register new user
+
+POST http://{{host}}/api/v1/auth/sign-up
+Content-Type: application/json
+
+{
+  "username": "tester",
+  "password": "tester"
+}
+
+###
